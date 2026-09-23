@@ -1,14 +1,15 @@
 import { useState } from 'react'
 import CampoTexto from './CampoTexto'
 import MensagemErro from './MensagemErro'
-import { criarAluno } from '../services/alunoService'
-import './FormularioAluno.css'
+import { criarProfessor } from '../services/professorService'
+import './FormularioProfessor.css'
 
-function FormularioAluno({ aoCadastrar }) {
+function FormularioProfessor({ aoCadastrar }) {
   const [nome, setNome] = useState('')
   const [email, setEmail] = useState('')
   const [cpf, setCpf] = useState('')
-  const [cidade, setCidade] = useState('')
+  const [disciplina, setDisciplina] = useState('')
+  const [dataAdmissao, setDataAdmissao] = useState('')
   const [erro, setErro] = useState('')
 
   async function handleSubmit(evento) {
@@ -16,21 +17,28 @@ function FormularioAluno({ aoCadastrar }) {
     setErro('')
 
     try {
-      const novoAluno = await criarAluno({ nome, email, cpf, cidade })
-      aoCadastrar(novoAluno)
+      const novoProfessor = await criarProfessor({
+        nome,
+        email,
+        cpf,
+        disciplina,
+        data_admissao: dataAdmissao,
+      })
+      aoCadastrar(novoProfessor)
 
       setNome('')
       setEmail('')
       setCpf('')
-      setCidade('')
+      setDisciplina('')
+      setDataAdmissao('')
     } catch (erro) {
-      setErro('Não foi possível cadastrar o aluno. Tente novamente.')
+      setErro('Não foi possível cadastrar o professor. Tente novamente.')
     }
   }
 
   return (
-    <section className="formulario-aluno">
-      <h1>Cadastro de Aluno</h1>
+    <section className="formulario-professor">
+      <h1>Cadastro de Professor</h1>
 
       <MensagemErro mensagem={erro} />
 
@@ -40,7 +48,7 @@ function FormularioAluno({ aoCadastrar }) {
           name="nome"
           value={nome}
           onChange={(evento) => setNome(evento.target.value)}
-          placeholder="Ex: Maria da Silva"
+          placeholder="Ex: Carlos Oliveira"
         />
         <CampoTexto
           label="E-mail"
@@ -48,7 +56,7 @@ function FormularioAluno({ aoCadastrar }) {
           type="email"
           value={email}
           onChange={(evento) => setEmail(evento.target.value)}
-          placeholder="Ex: maria@email.com"
+          placeholder="Ex: carlos@escola.com"
         />
         <CampoTexto
           label="CPF"
@@ -58,11 +66,18 @@ function FormularioAluno({ aoCadastrar }) {
           placeholder="000.000.000-00"
         />
         <CampoTexto
-          label="Cidade"
-          name="cidade"
-          value={cidade}
-          onChange={(evento) => setCidade(evento.target.value)}
-          placeholder="Ex: Natal"
+          label="Disciplina"
+          name="disciplina"
+          value={disciplina}
+          onChange={(evento) => setDisciplina(evento.target.value)}
+          placeholder="Ex: Programação para Internet"
+        />
+        <CampoTexto
+          label="Data de admissão"
+          name="data_admissao"
+          type="date"
+          value={dataAdmissao}
+          onChange={(evento) => setDataAdmissao(evento.target.value)}
         />
         <button type="submit">Cadastrar</button>
       </form>
@@ -70,4 +85,4 @@ function FormularioAluno({ aoCadastrar }) {
   )
 }
 
-export default FormularioAluno
+export default FormularioProfessor
